@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>ChatServer.Contracts</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.24.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\authentication.proto">
+      <Link>authentication.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\chat.proto">
+      <Link>chat.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcChat.Contracts";
+
+service ChatService {
+	rpc Hello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+	string name = 1;
+}
+
+message HelloResponse {
+	string text = 1;
+}
