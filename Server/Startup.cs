@@ -33,6 +33,8 @@ namespace Server
                 };
             });
             services.AddAuthorization();
+
+            services.AddSingleton<ChatRoom>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

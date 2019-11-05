@@ -1,15 +1,45 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "GrpcChat.Contracts";
 
 service ChatService {
-	rpc Hello (HelloRequest) returns (HelloResponse);
+	rpc SendMessage (MessageToSend) returns (SentMessage);
+	rpc Subscribe (SubscribeRequest) returns (stream Notification);
 }
 
-message HelloRequest {
-	string name = 1;
+message MessageToSend {
+	string content = 1;
 }
 
-message HelloResponse {
-	string text = 1;
+message SentMessage {
+	google.protobuf.Timestamp sent_utc = 1; 
+	string sender = 2;
+	string content = 3;
+}
+
+message SubscribeRequest { }
+
+message Notification {
+	oneof event {
+		SentMessage message_sent = 1;
+		Mention mention = 2;
+		UserEvent user_event = 3;
+	}
+}
+
+message Mention {
+	string sender = 1;
+	repeated string mentioned_users = 2;
+}
+
+message UserEvent {
+	string username = 1;
+	UserEventType event_type = 2; 
+}
+
+enum UserEventType {
+	JOINED_ROOM = 0;
+	LEFT_ROOM = 1;
 }

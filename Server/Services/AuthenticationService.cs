@@ -1,11 +1,10 @@
 ﻿using Grpc.Core;
 using GrpcChat.Contracts;
 using System.Threading.Tasks;
-using static GrpcChat.Contracts.AuthenticationService;
 
 namespace GrpcChat.Server.Services
 {
-    public class AuthenticationService : AuthenticationServiceBase
+    public class AuthenticationService : Contracts.AuthenticationService.AuthenticationServiceBase
     {
         public override Task<LoginResponse> Login(LoginRequest request, ServerCallContext context)
         {

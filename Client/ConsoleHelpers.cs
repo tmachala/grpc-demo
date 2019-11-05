@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GrpcChat.Contracts;
+using System;
 
 namespace GrpcChat.Client
 {
@@ -12,6 +13,7 @@ namespace GrpcChat.Client
             Console.WriteLine();
             Console.WriteLine("Please enter your name and an invitation code to join the chat room.");
             Console.WriteLine();
+            ResetColors();
         }
 
         public static void PrintSuccess(string message)
@@ -22,6 +24,18 @@ namespace GrpcChat.Client
             SetColors(White, Black);
             Console.WriteLine(message);
             Console.WriteLine();
+            ResetColors();
+        }
+
+        public static void PrintFailure(string reason)
+        {
+            SetColors(Red, Black);
+            Console.WriteLine();
+            Console.Write("FAIL: ");
+            SetColors(White, Black);
+            Console.WriteLine(reason);
+            Console.WriteLine();
+            ResetColors();
         }
 
         public static string ReadString(string prompt)
@@ -47,8 +61,40 @@ namespace GrpcChat.Client
             Console.Write(paddedPrompt + "   ");
             SetColors(White, Black);
             Console.WriteLine(answer);
+            ResetColors();
 
             return answer.Trim();
+        }
+
+        public static void PrintMention(Mention mention)
+        {
+            SetColors(Magenta, Black);
+            Console.Write("          " + mention.Sender);
+            SetColors(White, Black);
+            Console.Write(" has mentioned");
+
+            for (int i = 0; i < mention.MentionedUsers.Count; i++)
+            {
+                if (i > 0)
+                {
+                    SetColors(White, Black);
+                    Console.Write(" and");
+                }
+
+                SetColors(Magenta, Black);
+                Console.Write(" " + mention.MentionedUsers[i]);
+            }
+
+            Console.WriteLine();
+            ResetColors();
+        }
+
+        public static void PrintMessage(SentMessage message)
+        {
+            SetColors(Yellow, Black);
+            Console.Write((message.Sender + ": ").PadRight(10));
+            SetColors(Gray, Black);
+            Console.WriteLine(message.Content);
         }
 
         private static void SetColors(ConsoleColor foreground, ConsoleColor background)
@@ -57,10 +103,17 @@ namespace GrpcChat.Client
             Console.BackgroundColor = background;
         }
 
+        private static void ResetColors()
+        {
+            SetColors(Gray, Black);
+        }
+
         private const ConsoleColor White = ConsoleColor.White;
         private const ConsoleColor Black = ConsoleColor.Black;
         private const ConsoleColor Green = ConsoleColor.Green;
         private const ConsoleColor Yellow = ConsoleColor.Yellow;
         private const ConsoleColor Gray = ConsoleColor.Gray;
+        private const ConsoleColor Magenta = ConsoleColor.Magenta;
+        private const ConsoleColor Red = ConsoleColor.Red;
     }
 }
