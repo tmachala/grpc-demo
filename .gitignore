@@ -52,7 +52,9 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
+
+# We want to sync these:
+#**/Properties/launchSettings.json
 
 # StyleCop
 StyleCopReport.xml
