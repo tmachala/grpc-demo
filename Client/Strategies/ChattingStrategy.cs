@@ -11,18 +11,11 @@ namespace GrpcChat.Client.Strategies
     {
         public async Task RunAsync(string authToken, CancellationToken stoppingToken)
         {
-            var channel = ChannelFactory.CreateWithAuthToken(authToken);
+            using var channel = ChannelFactory.CreateWithAuthToken(authToken);
             var client = new ChatServiceClient(channel);
 
-            var subscription = client.Subscribe(new SubscribeRequest(), cancellationToken: stoppingToken);
-
-            // TODO
-            //var res2 = await client.SendMessageAsync(new MessageToSend { Content = "dsfs @john @alice" });
-            //await client.SendMessageAsync(new MessageToSend { Content = "2" });
-            //await client.SendMessageAsync(new MessageToSend { Content = "3e" });
-            //await client.SendMessageAsync(new MessageToSend { Content = "4" });
-
-            // Listen for incomming notification in a separate thread (otherwise, we couldn't type new messages)
+            // Listen for incomming notification in a separate thread.
+            // Otherwise, the console would be blocked and we couldn't type new messages.
             var listeningTask = Task.Run(async () => await ListenForNotificationsAsync(client, stoppingToken));
 
             try
@@ -55,8 +48,7 @@ namespace GrpcChat.Client.Strategies
                 }
                 else if (notification.EventCase == Notification.EventOneofCase.UserEvent)
                 {
-                    // TODO
-                    Console.WriteLine(notification.UserEvent.Username + ": " + notification.UserEvent.EventType.ToString());
+                    ConsoleHelpers.PrintUserEvent(notification.UserEvent);
                 }
             }
         }

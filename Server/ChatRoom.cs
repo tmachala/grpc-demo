@@ -1,4 +1,5 @@
 ﻿using GrpcChat.Contracts;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 
@@ -9,7 +10,11 @@ namespace GrpcChat.Server
         public BlockingCollection<Notification> JoinRoom(string username)
         {
             var queue = new BlockingCollection<Notification>();
-            _notificationQueues.TryAdd(username, queue);
+            var success = _notificationQueues.TryAdd(username, queue);
+
+            // TODO
+            if (!success)
+                throw new ApplicationException($"Another user named '{username}' in already in the room'!");
 
             var notification = CreateUserEventNotification(username, UserEventType.JoinedRoom);
             PushToAllExcept(notification, username);
@@ -49,7 +54,6 @@ namespace GrpcChat.Server
 
         //
         // TODO: Change to queue?
-        // Why are there multiple instances? It's registered as singleton!
         //
         private readonly ConcurrentDictionary<string, BlockingCollection<Notification>> _notificationQueues = new ConcurrentDictionary<string, BlockingCollection<Notification>>();
     }

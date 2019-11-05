@@ -43,7 +43,7 @@ namespace GrpcChat.Server.Services
         {
             var username = GetUserName(context);
             var queue = _chatRoom.JoinRoom(username);
-
+            
             try
             {
                 foreach (var notification in queue.GetConsumingEnumerable(context.CancellationToken))

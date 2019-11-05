@@ -1,5 +1,6 @@
 ﻿using GrpcChat.Contracts;
 using System;
+using System.Collections.Generic;
 
 namespace GrpcChat.Client
 {
@@ -8,10 +9,10 @@ namespace GrpcChat.Client
         public static void PrintWelcome()
         {
             SetColors(White, Black);
-            Console.WriteLine("----------  GRPC CHAT CLIENT  ----------");
+            Console.WriteLine("GRPC CHAT CLIENT");
             SetColors(Gray, Black);
             Console.WriteLine();
-            Console.WriteLine("Please enter your name and an invitation code to join the chat room.");
+            Console.WriteLine("Enter your name and an invitation code to join the chat.");
             Console.WriteLine();
             ResetColors();
         }
@@ -89,6 +90,15 @@ namespace GrpcChat.Client
             ResetColors();
         }
 
+        public static void PrintUserEvent(UserEvent userEvent)
+        {
+            SetColors(Magenta, Black);
+            Console.Write("          " + userEvent.Username);
+            SetColors(White, Black);
+            Console.WriteLine(EventDescriptions[userEvent.EventType]);
+            ResetColors();
+        }
+
         public static void PrintMessage(SentMessage message)
         {
             SetColors(Yellow, Black);
@@ -107,6 +117,12 @@ namespace GrpcChat.Client
         {
             SetColors(Gray, Black);
         }
+
+        private static readonly IReadOnlyDictionary<UserEventType, string> EventDescriptions = new Dictionary<UserEventType, string>
+        {
+            [UserEventType.JoinedRoom] = " joined the room",
+            [UserEventType.LeftRoom] = " left the room"
+        };
 
         private const ConsoleColor White = ConsoleColor.White;
         private const ConsoleColor Black = ConsoleColor.Black;

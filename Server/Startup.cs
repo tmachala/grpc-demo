@@ -34,7 +34,11 @@ namespace Server
             });
             services.AddAuthorization();
 
+            // Both gRPC services would run even without this but they would be resolved with scoped lifetime.
             services.AddSingleton<ChatRoom>();
+            services.AddSingleton<AuthenticationService>();
+            
+            services.AddSingleton<ChatService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

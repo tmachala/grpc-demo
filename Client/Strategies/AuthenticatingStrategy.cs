@@ -10,6 +10,7 @@ namespace GrpcChat.Client.Strategies
         {
             using var channel = ChannelFactory.CreateAnonymous();
             var client = new AuthenticationService.AuthenticationServiceClient(channel);
+            
             var authToken = "";
 
             while (string.IsNullOrEmpty(authToken))
