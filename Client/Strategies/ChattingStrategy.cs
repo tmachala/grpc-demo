@@ -23,7 +23,8 @@ namespace GrpcChat.Client.Strategies
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     var content = Console.ReadLine();
-                    await client.SendMessageAsync(new MessageToSend { Content = content }, cancellationToken: stoppingToken);
+                    var sentMessage = await client.SendMessageAsync(new MessageToSend { Content = content }, cancellationToken: stoppingToken);
+                    ConsoleHelpers.PrintMessage(sentMessage, isOwnMessage: true);
                 }
             }
             catch (Exception) when (stoppingToken.IsCancellationRequested)

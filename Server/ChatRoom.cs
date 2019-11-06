@@ -12,9 +12,10 @@ namespace GrpcChat.Server
             var queue = new BlockingCollection<Notification>();
             var success = _notificationQueues.TryAdd(username, queue);
 
-            // TODO
             if (!success)
+            {
                 throw new ApplicationException($"Another user named '{username}' in already in the room'!");
+            }
 
             var notification = CreateUserEventNotification(username, UserEventType.JoinedRoom);
             PushToAllExcept(notification, username);
@@ -52,9 +53,6 @@ namespace GrpcChat.Server
             };
         }
 
-        //
-        // TODO: Change to queue?
-        //
         private readonly ConcurrentDictionary<string, BlockingCollection<Notification>> _notificationQueues = new ConcurrentDictionary<string, BlockingCollection<Notification>>();
     }
 }

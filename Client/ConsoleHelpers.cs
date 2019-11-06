@@ -8,21 +8,24 @@ namespace GrpcChat.Client
     {
         public static void PrintWelcome()
         {
-            SetColors(White, Black);
+            SetColor(White);
             Console.WriteLine("GRPC CHAT CLIENT");
-            SetColors(Gray, Black);
+            SetColor(Gray);
             Console.WriteLine();
             Console.WriteLine("Enter your name and an invitation code to join the chat.");
+            Console.WriteLine("The invitation code is \"1234\".");
+            Console.WriteLine();
+            Console.WriteLine("Pro Tip: You can mention others via @.");
             Console.WriteLine();
             ResetColors();
         }
 
         public static void PrintSuccess(string message)
         {
-            SetColors(Green, Black);
+            SetColor(Green);
             Console.WriteLine();
             Console.Write("SUCCESS: ");
-            SetColors(White, Black);
+            SetColor(White);
             Console.WriteLine(message);
             Console.WriteLine();
             ResetColors();
@@ -30,10 +33,10 @@ namespace GrpcChat.Client
 
         public static void PrintFailure(string reason)
         {
-            SetColors(Red, Black);
+            SetColor(Red);
             Console.WriteLine();
             Console.Write("FAIL: ");
-            SetColors(White, Black);
+            SetColor(White);
             Console.WriteLine(reason);
             Console.WriteLine();
             ResetColors();
@@ -49,18 +52,18 @@ namespace GrpcChat.Client
 
             while (string.IsNullOrEmpty(answer))
             {
-                SetColors(Gray, Black);
+                SetColor(Gray);
                 Console.Write(paddedPrompt);
-                SetColors(Yellow, Black);
+                SetColor(Yellow);
                 Console.Write(" > ");
-                SetColors(White, Black);
+                SetColor(White);
                 answer = Console.ReadLine().Trim();
                 Console.CursorTop--;
             }
 
-            SetColors(Gray, Black);
+            SetColor(Gray);
             Console.Write(paddedPrompt + "   ");
-            SetColors(White, Black);
+            SetColor(White);
             Console.WriteLine(answer);
             ResetColors();
 
@@ -69,20 +72,20 @@ namespace GrpcChat.Client
 
         public static void PrintMention(Mention mention)
         {
-            SetColors(Magenta, Black);
-            Console.Write("          " + mention.Sender);
-            SetColors(White, Black);
+            SetColor(Magenta);
+            Console.Write(mention.Sender);
+            SetColor(White);
             Console.Write(" has mentioned");
 
             for (int i = 0; i < mention.MentionedUsers.Count; i++)
             {
                 if (i > 0)
                 {
-                    SetColors(White, Black);
+                    SetColor(White);
                     Console.Write(" and");
                 }
 
-                SetColors(Magenta, Black);
+                SetColor(Magenta);
                 Console.Write(" " + mention.MentionedUsers[i]);
             }
 
@@ -92,30 +95,33 @@ namespace GrpcChat.Client
 
         public static void PrintUserEvent(UserEvent userEvent)
         {
-            SetColors(Magenta, Black);
-            Console.Write("          " + userEvent.Username);
-            SetColors(White, Black);
+            SetColor(Magenta);
+            Console.Write(userEvent.Username);
+            SetColor(White);
             Console.WriteLine(EventDescriptions[userEvent.EventType]);
             ResetColors();
         }
 
-        public static void PrintMessage(SentMessage message)
+        public static void PrintMessage(SentMessage message, bool isOwnMessage = false)
         {
-            SetColors(Yellow, Black);
-            Console.Write((message.Sender + ": ").PadRight(10));
-            SetColors(Gray, Black);
+            if (isOwnMessage)
+                Console.CursorTop--;
+
+            SetColor(Yellow);
+            Console.Write(message.Sender + ": ");
+            SetColor(White);
             Console.WriteLine(message.Content);
         }
 
-        private static void SetColors(ConsoleColor foreground, ConsoleColor background)
+        private static void SetColor(ConsoleColor foreground)
         {
             Console.ForegroundColor = foreground;
-            Console.BackgroundColor = background;
+            Console.BackgroundColor = Black;
         }
 
         private static void ResetColors()
         {
-            SetColors(Gray, Black);
+            SetColor(Gray);
         }
 
         private static readonly IReadOnlyDictionary<UserEventType, string> EventDescriptions = new Dictionary<UserEventType, string>

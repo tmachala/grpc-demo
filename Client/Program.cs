@@ -12,7 +12,7 @@ namespace Client
         {
             ConsoleHelpers.PrintWelcome();
 
-            var tokenSource = new CancellationTokenSource();
+            using var tokenSource = new CancellationTokenSource();
             var stoppingToken = tokenSource.Token;
 
             Console.CancelKeyPress += (sender, e) => tokenSource.Cancel();
